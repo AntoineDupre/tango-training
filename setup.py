@@ -2,7 +2,7 @@ from setuptools import setup
 
 
 setup(
-    name='tango-training',
+    name='tangods-training',
     version='0.1.0.dev0',
     packages=['training'],
     author='S',
