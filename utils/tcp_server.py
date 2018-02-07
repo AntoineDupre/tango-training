@@ -1,6 +1,6 @@
 import asyncio
 from ressource import data
-
+from random import random
 
 def shift(index, array):
     return array[-index:] + array[:-index]
@@ -11,15 +11,21 @@ class Scope:
         self._on = False
         self._data = data
         self._index = 0
+        self._sign = 1
 
     @property
     def data(self):
         if self._on:
-            return shift(self.index, self._data)
+            rand = random() + 0.5
+            return map(lambda x: x*rand, shift(self.index, self._data))
 
     @property
     def index(self):
-        self._index = self._index + 1 if self._index < len(self._data) else 0
+        if -25 < self._index < 25:
+            self._index = self._index + self._sign
+        else:
+            self._sign = -1 * self._sign
+            self._index += self._sign
         return self._index
 
     def turn_on(self):
@@ -39,20 +45,20 @@ async def handle_connection(reader, writer):
         request = line.decode().strip()
         if request == "ON":
             scope.turn_on()
-            reply = "State: {}".format(scope.is_on)
+            reply = "State:{}".format(scope.is_on)
         elif request == "OFF":
             scope.turn_off()
-            reply = "State: {}".format(scope.is_on)
+            reply = "State:{}".format(scope.is_on)
         elif request == "STATE":
-            reply = "State: {}".format(scope.is_on)
+            reply = "State:{}".format(scope.is_on)
         elif request == "DATA":
             data = scope.data
             if data:
-                reply = "Data: {}".format(data)
+                reply = "Data:{}".format(", ".join(map(str, data)))
             else:
-                reply = "ERROR: NO DATA"
+                reply = "ERROR:NO DATA"
         else:
-            reply = "ERROR: INVALID REQUEST"
+            reply = "ERROR:INVALID REQUEST"
         writer.write(reply.encode() + b'\n')
     writer.close()
 
