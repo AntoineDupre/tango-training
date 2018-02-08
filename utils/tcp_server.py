@@ -46,6 +46,8 @@ def handle_connection(reader, writer):
     scope = Scope()
     while True:
         line = yield from reader.readline()
+        if not line: # an empty string means the client disconnected
+             break
         request = line.decode().strip()
         if request == "ON":
             scope.turn_on()
@@ -64,7 +66,10 @@ def handle_connection(reader, writer):
         else:
             reply = "ERROR:INVALID REQUEST"
         writer.write(reply.encode() + b'\n')
-    writer.close()
+    try:
+        writer.close()
+    except Exception:
+        print("ohoh")
 
 @asyncio.coroutine
 def start_serving(host, port):
@@ -89,4 +94,11 @@ def main(host='0.0.0.0', port=8888):
 
 
 if __name__ == '__main__':
-    main()
+    import sys
+    try:
+        host, port= sys.argv[1], sys.argv[2]
+    except IndexError:
+        host="0.0.0.0"
+        port=8989
+    print("Start serving on {}:{}".format(host, port))
+    main(host, port)
