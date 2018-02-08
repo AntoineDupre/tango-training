@@ -1,5 +1,6 @@
 import pytest
 from training.device import TrainingDevice
+# from training.possible_solution import TrainingDevice
 from tango.test_utils import DeviceTestContext
 from tango import DevFailed
 from utils import tcp_server
@@ -80,6 +81,9 @@ def test_off_state(device_proxy):
 
 @catch_unimplemented
 def test_wavefrom_attribute(device_proxy):
+    with pytest.raises(DevFailed):
+        # Expect to get receive an exception if the acquisition is not on
+        read_out = device_proxy.read_attribute("waveform")
     device_proxy.command_inout("TurnOn")
     read_out = device_proxy.read_attribute("waveform")
     assert read_out
