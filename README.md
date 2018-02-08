@@ -1,4 +1,6 @@
-#About this repository
+About this repository
+===
+
 
 This repository is an example of a tango device server.
 
@@ -15,9 +17,11 @@ The project contains:
 
 ---
 
-#The TCP server:
+The TCP server:
+===
 
-## Protocol
+Protocol
+---
  - Request should and with ```b'\n'```
  - Get scope state: 
      - request: ```b'STATE\n'```
@@ -32,14 +36,16 @@ The project contains:
      - request: ```b'DATA\n'```
      - reply example: ```b'Data:2.938672855118084e-10, 1.9815536275824104e-10, ...., 3.88063288479267e-10\n''```
 
-## Basic shell client
+Basic shell client
+---
 This protocol can be test from the linux shell with a basic tcp client: 
 ```bash
 $ nc host port
 ON
 State:ON
 ```
-## Basic python script
+Basic python script
+---
 ```python
 
 from telnetlib import Telnet
@@ -54,16 +60,17 @@ telnet.close()
 ---
 
 
-#GOALS:
+GOALS:
+===
 
-
-
-###1 - Run the tango device
+1 - Run the tango device
+---
 Validation:
 
  - tests/test_device.py::test_server_running: PASSED
 
-###2 - Connection with tango properties
+2 - Connection with tango properties
+---
 Requires:
 
  - tango property: host
@@ -74,7 +81,8 @@ Validation:
  - tests/test_device.py::test_server_running: PASSED
 
 
-###3 - Start/Stop acquisition
+3 - Start/Stop acquisition
+---
 Requires:
 
  - Tango command "TurnOn" (start the acquisition)
@@ -89,7 +97,8 @@ Validation:
  - tests/test_device.py::test_on_state
  - tests/test_device.py::test_off_state
 
-###Expose waveform as tango attribute
+4 - Expose waveform as tango attribute
+---
 Requires:
 
  - A Tango spectrum float attribute named "waveform".
@@ -99,7 +108,8 @@ Validation:
 
  - tests/test_device.py::test_wavefrom_attribute
 
-###Expose the maximum value as tango attribute
+5 - Expose the maximum value as tango attribute
+---
 Requires:
 
  - A Tango scalar float attribute named "maximum"
@@ -108,7 +118,8 @@ Validation:
 
  - tests/test_device.py::test_maximum_attribute
 
-###Add an offset to the waveform
+6 - Add an offset to the waveform
+---
 Requires:
 
  - Tango writable scalar float attribute named "offset"
@@ -118,19 +129,21 @@ Validation:
 
  - tests/test_device.py::test_offset_attribute
 
-###Control the communication rate
+7 - Control the communication rate
+---
 Requires:
 
  - Tango expert polled command named "Update"
  - The Update command should manage the tcp request.
 
-###Subscribe to a PLC alarm tag:
+Subscribe to a PLC alarm tag:
+---
 Requires:
 
  - Add a alarm tag attribute:  test/fakeplc/1/fb_r1_105s_dia_rto_ad__inalarm
  - Switch the tango State to ```Alarm``` if the tag is raised
 
-
+---
 
 Test
 ====
