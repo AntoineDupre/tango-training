@@ -1,5 +1,5 @@
 import pytest
-from training.device_tmp import TrainingDevice
+from training.device import TrainingDevice
 from tango.test_utils import DeviceTestContext
 from tango import DevFailed
 from utils import tcp_server
