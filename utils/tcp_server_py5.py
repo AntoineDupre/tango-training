@@ -41,11 +41,10 @@ class Scope:
     def is_on(self):
         return "ON" if self._on else "OFF"
 
-@asyncio.coroutine
-def handle_connection(reader, writer):
+
+async def handle_connection(reader, writer):
     scope = Scope()
-    while True:
-        line = yield from reader.readline()
+    async for line in reader:
         request = line.decode().strip()
         if request == "ON":
             scope.turn_on()
@@ -66,20 +65,20 @@ def handle_connection(reader, writer):
         writer.write(reply.encode() + b'\n')
     writer.close()
 
-@asyncio.coroutine
-def start_serving(host, port):
-    server = yield from asyncio.start_server(handle_connection, host, port)
+
+async def start_serving():
+    server = await asyncio.start_server(handle_connection, '0.0.0.0', 8888)
     return server
 
-@asyncio.coroutine
-def stop_serving(server):
+
+async def stop_serving(server):
     server.close()
-    yield from server.wait_closed()
+    await server.wait_closed()
 
 
-def main(host='0.0.0.0', port=8888):
+def main():
     loop = asyncio.get_event_loop()
-    server = loop.run_until_complete(start_serving(host, port))
+    server = loop.run_until_complete(start_serving())
     try:
         loop.run_forever()
     except KeyboardInterrupt:
