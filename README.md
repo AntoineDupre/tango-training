@@ -22,7 +22,7 @@ The TCP server:
 
 Protocol
 ---
- - Request should and with ```b'\n'```
+ - Request should end with ```b'\n'```
  - Get scope state: 
      - request: ```b'STATE\n'```
      - reply: ```b'State:ON\n'``` or ```b'State:OFF\n'```
