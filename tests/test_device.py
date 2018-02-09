@@ -54,7 +54,7 @@ def server():
 
 @pytest.yield_fixture
 def device_proxy(server):
-    with DeviceTestContext(TrainingDevice, port=9999) as device:
+    with DeviceTestContext(TrainingDevice, properties={'port':9999}) as device:
         yield device
 
 
@@ -82,7 +82,7 @@ def test_off_state(device_proxy):
 @catch_unimplemented
 def test_wavefrom_attribute(device_proxy):
     with pytest.raises(DevFailed):
-        # Expect to get receive an exception if the acquisition is not on
+        # Expect to get an exception if the acquisition is not on
         read_out = device_proxy.read_attribute("waveform")
     device_proxy.command_inout("TurnOn")
     read_out = device_proxy.read_attribute("waveform")
