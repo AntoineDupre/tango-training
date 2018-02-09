@@ -63,6 +63,8 @@ telnet.close()
 GOALS:
 ===
 
+[PyTango documentation](http://pytango.readthedocs.io/en/latest/)
+
 1 - Run the tango device
 ---
 Validation:
