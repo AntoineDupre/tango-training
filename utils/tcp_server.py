@@ -41,9 +41,11 @@ class Scope:
     def is_on(self):
         return "ON" if self._on else "OFF"
 
+scope = Scope()
+
+
 @asyncio.coroutine
 def handle_connection(reader, writer):
-    scope = Scope()
     while True:
         line = yield from reader.readline()
         if not line: # an empty string means the client disconnected
